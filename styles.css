@@ -88,6 +88,7 @@ body {
   outline: none;
   border: none;
   width: 25vw;
+      margin-bottom: -15px;
 }
 
 .searchInput::placeholder {

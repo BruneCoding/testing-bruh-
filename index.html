@@ -59,44 +59,15 @@
   <p id="ai-summarized">Loading...</p>
 </div>
 <script src="script.js"></script>
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyDlXV7XQrKKu9KxceEhKF2toGtUiTXR8QU",
-    authDomain: "testing-brungle-54a9f.firebaseapp.com",
-    databaseURL: "https://testing-brungle-54a9f-default-rtdb.firebaseio.com",
-    projectId: "testing-brungle-54a9f",
-    storageBucket: "testing-brungle-54a9f.appspot.com",
-    messagingSenderId: "558119080810",
-    appId: "1:558119080810:web:0b35d83f64d488ae5d4b13"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
-
-  window.addEventListener("DOMContentLoaded", async () => {
-    try {
-      const querySnap = await get(ref(db, "search/query"));
-      const queryText = querySnap.val();
-      console.log("Query received from Firebase:", queryText);
-
-      const input = document.getElementById("query");
-      if (queryText && input) {
-        input.value = queryText;
-        console.log("Input field filled.");
-        // Trigger Enter key programmatically
-        const event = new KeyboardEvent("keydown", {
-          key: "Enter",
-          bubbles: true,
-        });
-        input.dispatchEvent(event);
-      } else {
-        console.log("Input element not found or query empty.");
+<script>
+  window.addEventListener('load', () => {
+    const hashQuery = decodeURIComponent(location.hash.slice(1));
+    if (hashQuery) {
+      const input = document.getElementById('query');
+      if (input) {
+        input.value = hashQuery;
+        performSearch(); // triggers search + AI summary
       }
-    } catch (err) {
-      console.error("Error reading from Firebase:", err);
     }
   });
 </script>

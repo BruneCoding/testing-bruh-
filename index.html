@@ -68,7 +68,7 @@
     authDomain: "testing-brungle-54a9f.firebaseapp.com",
     databaseURL: "https://testing-brungle-54a9f-default-rtdb.firebaseio.com",
     projectId: "testing-brungle-54a9f",
-    storageBucket: "testing-brungle-54a9f.firebasestorage.app",
+    storageBucket: "testing-brungle-54a9f.appspot.com",
     messagingSenderId: "558119080810",
     appId: "1:558119080810:web:0b35d83f64d488ae5d4b13"
   };
@@ -76,16 +76,27 @@
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
 
-  const searchInput = document.getElementById("query");
+  window.addEventListener("DOMContentLoaded", async () => {
+    try {
+      const querySnap = await get(ref(db, "search/query"));
+      const queryText = querySnap.val();
+      console.log("Query received from Firebase:", queryText);
 
-  get(ref(db, "search/query")).then((snapshot) => {
-    if (snapshot.exists()) {
-      const query = snapshot.val();
-      searchInput.value = query;
-
-      // Trigger your search logic
-      const enterEvent = new KeyboardEvent("keydown", { key: "Enter" });
-      searchInput.dispatchEvent(enterEvent);
+      const input = document.getElementById("query");
+      if (queryText && input) {
+        input.value = queryText;
+        console.log("Input field filled.");
+        // Trigger Enter key programmatically
+        const event = new KeyboardEvent("keydown", {
+          key: "Enter",
+          bubbles: true,
+        });
+        input.dispatchEvent(event);
+      } else {
+        console.log("Input element not found or query empty.");
+      }
+    } catch (err) {
+      console.error("Error reading from Firebase:", err);
     }
   });
 </script>

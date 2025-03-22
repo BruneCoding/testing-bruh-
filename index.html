@@ -59,3 +59,33 @@
   <p id="ai-summarized">Loading...</p>
 </div>
 <script src="script.js"></script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDlXV7XQrKKu9KxceEhKF2toGtUiTXR8QU",
+    authDomain: "testing-brungle-54a9f.firebaseapp.com",
+    databaseURL: "https://testing-brungle-54a9f-default-rtdb.firebaseio.com",
+    projectId: "testing-brungle-54a9f",
+    storageBucket: "testing-brungle-54a9f.firebasestorage.app",
+    messagingSenderId: "558119080810",
+    appId: "1:558119080810:web:0b35d83f64d488ae5d4b13"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  const searchInput = document.getElementById("query");
+
+  get(ref(db, "search/query")).then((snapshot) => {
+    if (snapshot.exists()) {
+      const query = snapshot.val();
+      searchInput.value = query;
+
+      // Trigger your search logic
+      const enterEvent = new KeyboardEvent("keydown", { key: "Enter" });
+      searchInput.dispatchEvent(enterEvent);
+    }
+  });
+</script>
